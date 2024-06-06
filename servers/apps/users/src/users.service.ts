@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { LoginDto, RegisterDto } from './dto/user.dto';
-import { PrismaService } from 'prisma/Prisma.Service';
+import { PrismaService } from '../../../prisma/Prisma.Service';
 
 @Injectable()
 export class UsersService {
@@ -40,6 +40,6 @@ export class UsersService {
 
   // Get all users service
   async getUsers() {
-    return this.prisma.user.findMany({});
+    return this.prisma.User.findMany({});
   }
 }

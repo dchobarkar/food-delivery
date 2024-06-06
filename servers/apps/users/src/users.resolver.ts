@@ -1,9 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UsersService } from './users.service';
-import { RegisterResponse } from './types/user.types';
-import { RegisterDto } from './dto/user.dto';
 import { BadRequestException } from '@nestjs/common';
+
+import { UsersService } from './users.service';
+import { RegisterDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
+import { RegisterResponse } from './types/user.types';
 
 @Resolver('User')
 export class UserResolver {
@@ -12,7 +13,7 @@ export class UserResolver {
   @Mutation(() => RegisterResponse)
   async register(
     @Args('registerInput') registerDto: RegisterDto,
-  ): Promise<RegisterResponse> {
+  ): Promise<any> {
     if (!registerDto.name || !registerDto.email || !registerDto.password)
       throw new BadRequestException('Please fill all the fields');
 
