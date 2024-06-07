@@ -11,6 +11,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UserResolver } from './users.resolver';
 import { PrismaService } from '../../../prisma/Prisma.Service';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PrismaService } from '../../../prisma/Prisma.Service';
         federation: 2,
       },
     }),
+    EmailModule,
   ],
   controllers: [UsersController],
   providers: [
