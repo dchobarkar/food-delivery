@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 
 import { LoginDto, RegisterDto } from './dto/user.dto';
 import { PrismaService } from '../../../prisma/Prisma.Service';
@@ -14,16 +15,25 @@ export class UsersService {
   ) {}
 
   // Register User
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto, response: Response) {
     const { name, email, password } = registerDto;
+    const isEmailExist = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (isEmailExist)
+      throw new BadRequestException('User already exists with this email');
 
-    const user = {
-      name,
-      email,
-      password,
-    };
+    const user = await this.prisma.user.create({
+      data: {
+        name,
+        email,
+        password,
+      },
+    });
 
-    return user;
+    return { user, response };
   }
 
   // Login Service
@@ -40,6 +50,6 @@ export class UsersService {
 
   // Get all users service
   async getUsers() {
-    return this.prisma.User.findMany({});
+    return this.prisma.user.findMany({});
   }
 }

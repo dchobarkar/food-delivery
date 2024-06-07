@@ -13,7 +13,7 @@ export class ErrorType {
 @ObjectType()
 export class RegisterResponse {
   @Field(() => User, { nullable: true })
-  User?: User | any;
+  user?: User | any;
 
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
@@ -21,8 +21,8 @@ export class RegisterResponse {
 
 @ObjectType()
 export class LoginResponse {
-  @Field(() => User)
-  User: User;
+  @Field(() => User, { nullable: true })
+  user?: User | unknown;
 
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
