@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { join } from 'path';
 
 import { EmailService } from './email.service';
 
@@ -22,7 +23,10 @@ import { EmailService } from './email.service';
           from: 'DarshanWebDev',
         },
         template: {
-          dir: join(__dirname, '../../../../servers/email-templates'),
+          dir: join(
+            __dirname,
+            '../../../../servers/apps/users/email-templates',
+          ),
           adapter: new EjsAdapter(),
           options: {
             strict: false,

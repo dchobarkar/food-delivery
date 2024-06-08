@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 import { LoginDto, RegisterDto } from './dto/user.dto';
 import { PrismaService } from '../../../prisma/Prisma.Service';
+import { EmailService } from './email/email.service';
 
 interface UserData {
   name: string;
@@ -20,6 +21,7 @@ export class UsersService {
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
+    private readonly emailService: EmailService,
   ) {}
 
   // Register User
@@ -56,7 +58,13 @@ export class UsersService {
     const activationToken = await this.createActivationToken(user);
     const activationCode = activationToken.activationCode;
 
-    console.log(activationCode);
+    await this.emailService.sendMail({
+      email,
+      subject: 'Activate your account!',
+      template: './activation-mail',
+      name,
+      activationCode,
+    });
 
     // const user = await this.prisma.user.create({
     //   data: {
