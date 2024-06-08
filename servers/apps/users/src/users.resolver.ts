@@ -3,9 +3,9 @@ import { BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
 
 import { UsersService } from './users.service';
-import { RegisterDto } from './dto/user.dto';
+import { ActivationDto, RegisterDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
-import { RegisterResponse } from './types/user.types';
+import { ActivationResponse, RegisterResponse } from './types/user.types';
 
 @Resolver('User')
 export class UserResolver {
@@ -13,15 +13,26 @@ export class UserResolver {
 
   @Mutation(() => RegisterResponse)
   async register(
-    @Args('registerInput') registerDto: RegisterDto,
+    @Args('registerDto') registerDto: RegisterDto,
     @Context() context: { res: Response },
   ): Promise<RegisterResponse> {
     if (!registerDto.name || !registerDto.email || !registerDto.password)
       throw new BadRequestException('Please fill all the fields');
 
-    const user = await this.usersService.register(registerDto, context.res);
+    const { activation_token } = await this.usersService.register(
+      registerDto,
+      context.res,
+    );
 
-    return { user };
+    return { activation_token };
+  }
+
+  @Mutation(() => ActivationResponse)
+  async activateUser(
+    @Args('activationDto') activationDto: ActivationDto,
+    @Context() context: { res: Response },
+  ): Promise<ActivationResponse> {
+    return await this.usersService.activateUser(activationDto, context.res);
   }
 
   @Query(() => [User])
