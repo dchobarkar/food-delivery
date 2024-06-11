@@ -3,9 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../../../prisma/Prisma.Service';
 
 import { ActivationDto, LoginDto, RegisterDto } from './dto/user.dto';
-import { PrismaService } from '../../../prisma/Prisma.Service';
 import { EmailService } from './email/email.service';
 import { TokenSender } from './utils/sendToken';
 
@@ -157,6 +157,15 @@ export class UsersService {
     const refreshToken = req.refreshToken;
 
     return { user, accessToken, refreshToken };
+  }
+
+  // Log out user
+  async logout(req: any) {
+    req.user = null;
+    req.accessToken = null;
+    req.refreshToken = null;
+
+    return { message: 'Logged out successfully' };
   }
 
   // Get all users service
