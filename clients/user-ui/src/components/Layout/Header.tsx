@@ -1,7 +1,17 @@
+import styles from "@/src/utils/style";
 import React from "react";
+import NavItems from "../NavItems";
 
 const Header = () => {
-  return <header>Header</header>;
+  return (
+    <header className="w-full  bg-[#0F1524]">
+      <div className="w-[90] m-auto h-[80px] flex items-center justify-between">
+        <h1 className={`${styles.logo}`}>DarshanWebDev</h1>
+
+        <NavItems />
+      </div>
+    </header>
+  );
 };
 
 export default Header;
