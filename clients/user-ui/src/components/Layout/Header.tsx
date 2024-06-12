@@ -1,5 +1,6 @@
-import styles from "@/src/utils/style";
 import React from "react";
+
+import styles from "@/src/utils/style";
 import NavItems from "../NavItems";
 
 const Header = () => {
