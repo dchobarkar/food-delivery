@@ -3,11 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../../../prisma/Prisma.Service';
 
 import { ActivationDto, LoginDto, RegisterDto } from './dto/user.dto';
 import { EmailService } from './email/email.service';
 import { TokenSender } from './utils/sendToken';
+import { PrismaService } from '../../../prisma/Prisma.Service';
 
 interface UserData {
   name: string;
