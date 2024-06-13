@@ -9,8 +9,11 @@ import {
 import { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 
+import AuthScreen from "../screens/AuthScreen";
+
 const ProfileDropDown = () => {
   const [signedIn, setSignedIn] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex items-center gap-4">
@@ -44,8 +47,12 @@ const ProfileDropDown = () => {
           </DropdownMenu>
         </Dropdown>
       ) : (
-        <CgProfile className="text-3xl cursor-pointer" />
+        <CgProfile
+          className="text-3xl cursor-pointer"
+          onClick={() => setOpen(!open)}
+        />
       )}
+      {open && <AuthScreen />}
     </div>
   );
 };
