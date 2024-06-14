@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AiFillGithub,
@@ -9,6 +12,7 @@ import {
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
+import { LOGIN_USER } from "@/src/graphql/actions/login.action";
 import styles from "@/src/utils/style";
 
 const formSchema = z.object({
@@ -18,7 +22,15 @@ const formSchema = z.object({
 
 type LoginSchema = z.infer<typeof formSchema>;
 
-const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
+const Login = ({
+  setActiveState,
+  setOpen,
+}: {
+  setActiveState: (e: string) => void;
+  setOpen: (e: boolean) => void;
+}) => {
+  const [show, setShow] = useState(false);
+  const [login, { loading }] = useMutation(LOGIN_USER);
   const {
     register,
     handleSubmit,
@@ -27,10 +39,27 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
   } = useForm<LoginSchema>({
     resolver: zodResolver(formSchema),
   });
-  const [show, setShow] = useState(false);
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      const loginData = {
+        email: data.email,
+        password: data.password,
+      };
+      const response = await login({
+        variables: loginData,
+      });
+
+      if (response.data.Login.user) {
+        toast.success("Login Successful");
+        Cookies.set("refresh_token", response.data.Login.refreshToken);
+        Cookies.set("access_token", response.data.Login.accessToken);
+        setOpen(false);
+      } else toast.error(response.data.Login.error.message);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+
     reset();
   };
 
@@ -53,6 +82,7 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
             {`${errors.email.message}`}
           </span>
         )}
+
         <div className="w-full mt-5 relative mb-1">
           <label htmlFor="password" className={`${styles.label}`}></label>
 
@@ -91,7 +121,7 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
           <input
             type="submit"
             value="Login"
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
             className={`${styles.button} mt-3`}
           />
         </div>
