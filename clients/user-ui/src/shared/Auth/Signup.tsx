@@ -12,33 +12,52 @@ import { FcGoogle } from "react-icons/fc";
 import styles from "@/src/utils/style";
 
 const formSchema = z.object({
+  name: z.string().min(3, "Name must be atleast 3 characters long"),
   email: z.string().email(),
   password: z.string().min(8, "Password must be atleast 8 characters long"),
+  phone_number: z
+    .number()
+    .min(10, "Phone number must be atleast 10 characters"),
 });
 
-type LoginSchema = z.infer<typeof formSchema>;
+type SignupSchema = z.infer<typeof formSchema>;
 
-const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
+const Signup = ({
+  setActiveState,
+}: {
+  setActiveState: (e: string) => void;
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<LoginSchema>({
+  } = useForm<SignupSchema>({
     resolver: zodResolver(formSchema),
   });
   const [show, setShow] = useState(false);
 
-  const onSubmit = (data: LoginSchema) => {
+  const onSubmit = (data: SignupSchema) => {
     console.log(data);
     reset();
   };
 
   return (
     <div>
-      <h1 className={`${styles.title}`}>Login with DarshanWebDev</h1>
+      <h1 className={`${styles.title}`}>Signup with DarshanWebDev</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full relative mb-3">
+          <label className={`${styles.label}`}>Enter your Name</label>
+
+          <input
+            {...register("name")}
+            type="text"
+            placeholder="aa bb cc"
+            className={`${styles.input}`}
+          />
+        </div>
+
         <label className={`${styles.label}`}>Enter your email</label>
 
         <input
@@ -53,6 +72,18 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
             {`${errors.email.message}`}
           </span>
         )}
+
+        <div className="w-full relative mt-3">
+          <label className={`${styles.label}`}>Enter your Phone Number</label>
+
+          <input
+            {...register("phone_number")}
+            type="number"
+            placeholder="123456789"
+            className={`${styles.input}`}
+          />
+        </div>
+
         <div className="w-full mt-5 relative mb-1">
           <label htmlFor="password" className={`${styles.label}`}></label>
 
@@ -62,6 +93,10 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
             placeholder="password"
             className={`${styles.input}`}
           />
+
+          {errors.password && (
+            <span className="text-red-500">{`${errors.password.message}`}</span>
+          )}
 
           {!show ? (
             <AiOutlineEyeInvisible
@@ -78,19 +113,10 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
           )}
         </div>
 
-        {errors.password && (
-          <span className="text-red-500 mt-1">{`${errors.password.message}`}</span>
-        )}
-
         <div className="w-full mt-5">
-          <span
-            className={`${styles.label} text-[#2190ff] block text-right cursor-pointer`}
-          >
-            Forgot your password ?
-          </span>
           <input
             type="submit"
-            value="Login"
+            value="Sign Up"
             disabled={isSubmitting}
             className={`${styles.button} mt-3`}
           />
@@ -109,12 +135,12 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
         </div>
 
         <h5 className="text-center pt-4 font-Poppins text-[14px]">
-          Not have any account ?{" "}
+          Already have an account ?{" "}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"
-            onClick={() => setActiveState("Signup")}
+            onClick={() => setActiveState("Login")}
           >
-            Sign Up
+            Login
           </span>
         </h5>
 
@@ -124,4 +150,4 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
   );
 };
 
-export default Login;
+export default Signup;
