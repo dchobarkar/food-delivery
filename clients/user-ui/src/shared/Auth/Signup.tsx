@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
 import {
   AiFillGithub,
   AiOutlineEye,
@@ -10,6 +12,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 
 import styles from "@/src/utils/style";
+import { REGISTER_USER } from "@/src/graphql/actions/register.action";
 
 const formSchema = z.object({
   name: z.string().min(3, "Name must be atleast 3 characters long"),
@@ -27,6 +30,7 @@ const Signup = ({
 }: {
   setActiveState: (e: string) => void;
 }) => {
+  const [registerUserMutation, { loading }] = useMutation(REGISTER_USER);
   const {
     register,
     handleSubmit,
@@ -37,9 +41,18 @@ const Signup = ({
   });
   const [show, setShow] = useState(false);
 
-  const onSubmit = (data: SignupSchema) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (data: SignupSchema) => {
+    try {
+      const response = await registerUserMutation({
+        variables: data,
+      });
+
+      localStorage.setItem("activation_token", response.data.activation_token);
+      toast.success("Please check your email to activate your account!");
+      reset();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -77,7 +90,7 @@ const Signup = ({
           <label className={`${styles.label}`}>Enter your Phone Number</label>
 
           <input
-            {...register("phone_number")}
+            {...register("phone_number", { valueAsNumber: true })}
             type="number"
             placeholder="123456789"
             className={`${styles.input}`}
@@ -94,10 +107,6 @@ const Signup = ({
             className={`${styles.input}`}
           />
 
-          {errors.password && (
-            <span className="text-red-500">{`${errors.password.message}`}</span>
-          )}
-
           {!show ? (
             <AiOutlineEyeInvisible
               className="absolute bottom-3 right-2 z-1 cursor-pointer"
@@ -113,11 +122,15 @@ const Signup = ({
           )}
         </div>
 
+        {errors.password && (
+          <span className="text-red-500 mt-1">{`${errors.password.message}`}</span>
+        )}
+
         <div className="w-full mt-5">
           <input
             type="submit"
             value="Sign Up"
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
             className={`${styles.button} mt-3`}
           />
         </div>
