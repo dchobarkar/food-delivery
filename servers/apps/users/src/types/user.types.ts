@@ -49,3 +49,12 @@ export class LogoutReponse {
   @Field()
   message?: string;
 }
+
+@ObjectType()
+export class ForgotPasswordResponse {
+  @Field()
+  message: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
