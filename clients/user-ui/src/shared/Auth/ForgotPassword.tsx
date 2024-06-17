@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
+import toast from "react-hot-toast";
 
 import styles from "@/src/utils/style";
+import { FORGOT_PASSWORD } from "@/src/graphql/actions/forgot-password.action";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -15,6 +18,7 @@ const ForgotPassword = ({
 }: {
   setActiveState: (e: string) => void;
 }) => {
+  const [forgotPassword, { loading }] = useMutation(FORGOT_PASSWORD);
   const {
     register,
     handleSubmit,
@@ -25,7 +29,17 @@ const ForgotPassword = ({
   });
 
   const onSubmit = async (data: ForgotPasswordSchema) => {
-    console.log(data);
+    try {
+      const response = await forgotPassword({
+        variables: {
+          email: data.email,
+        },
+      });
+      toast.success("Please check your email to reset your password");
+      reset();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -55,7 +69,7 @@ const ForgotPassword = ({
         <input
           type="submit"
           value="Submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || loading}
           className={`${styles.button} mt-3`}
         />
 

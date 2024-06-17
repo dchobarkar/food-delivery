@@ -201,7 +201,8 @@ export class UsersService {
     const { password, activationToken } = resetPasswordDto;
 
     const decoded = await this.jwtService.decode(activationToken);
-    if (!decoded) throw new BadRequestException('Invalid Token');
+    if (!decoded || decoded?.exp * 1000 < Date.now())
+      throw new BadRequestException('Invalid Token');
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = this.prisma.user.update({
