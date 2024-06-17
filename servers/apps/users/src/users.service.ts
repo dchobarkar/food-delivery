@@ -10,6 +10,7 @@ import {
   ForgotPasswordDto,
   LoginDto,
   RegisterDto,
+  ResetPasswordDto,
 } from './dto/user.dto';
 import { EmailService } from './email/email.service';
 import { PrismaService } from '../../../prisma/Prisma.Service';
@@ -193,6 +194,24 @@ export class UsersService {
     });
 
     return { message: 'Your forgot password request successful' };
+  }
+
+  // Reset Password
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { password, activationToken } = resetPasswordDto;
+
+    const decoded = await this.jwtService.decode(activationToken);
+    if (!decoded) throw new BadRequestException('Invalid Token');
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = this.prisma.user.update({
+      where: { id: decoded.user.id },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return { user };
   }
 
   // Get logged in user
