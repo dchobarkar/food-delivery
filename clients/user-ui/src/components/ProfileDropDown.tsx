@@ -11,18 +11,25 @@ import {
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { CgProfile } from "react-icons/cg";
+import { signOut, useSession } from "next-auth/react";
 
 import AuthScreen from "../screens/AuthScreen";
 import useUser from "../hooks/useUser";
+import { registerUser } from "../actions/register-user";
 
 const ProfileDropDown = () => {
   const [signedIn, setSignedIn] = useState(false);
   const [open, setOpen] = useState(false);
+
   const { user, loading } = useUser();
+  const { data } = useSession();
 
   useEffect(() => {
     if (!loading) setSignedIn(!!user);
-  }, [loading, user]);
+    if (data?.user) setSignedIn(true);
+
+    addUser(data?.user);
+  }, [loading, user, open, data]);
 
   const logoutHandler = () => {
     Cookies.remove("access_token");
@@ -30,6 +37,10 @@ const ProfileDropDown = () => {
 
     toast.success("Log out successful!");
     window.location.reload();
+  };
+
+  const addUser = async (user: any) => {
+    registerUser(user);
   };
 
   return (
@@ -40,14 +51,16 @@ const ProfileDropDown = () => {
             <Avatar
               as="button"
               className="transition-transform"
-              src={user?.avatar?.url}
+              src={data?.user ? data.user.image : user.image}
             />
           </DropdownTrigger>
 
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{user.email}</p>
+              <p className="font-semibold">
+                {data?.user ? data.user.email : user.email}
+              </p>
             </DropdownItem>
 
             <DropdownItem key="settings">My Profile</DropdownItem>
@@ -58,7 +71,11 @@ const ProfileDropDown = () => {
               Apply for Seller account
             </DropdownItem>
 
-            <DropdownItem key="logout" color="danger" onClick={logoutHandler}>
+            <DropdownItem
+              key="logout"
+              color="danger"
+              onClick={() => signOut() || logoutHandler}
+            >
               Logout
             </DropdownItem>
           </DropdownMenu>

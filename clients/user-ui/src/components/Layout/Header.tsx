@@ -5,7 +5,7 @@ import NavItems from "../NavItems";
 
 const Header = () => {
   return (
-    <header className="w-full  bg-[#0F1524]">
+    <header className="w-full  bg-[#0A0713]">
       <div className="w-[90] m-auto h-[80px] flex items-center justify-between">
         <h1 className={`${styles.logo}`}>DarshanWebDev</h1>
 

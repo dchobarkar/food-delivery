@@ -3,14 +3,14 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import { useMutation } from "@apollo/client";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AiFillGithub,
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useMutation } from "@apollo/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { LOGIN_USER } from "@/src/graphql/actions/login.action";
 import styles from "@/src/utils/style";
@@ -31,6 +31,7 @@ const Login = ({
 }) => {
   const [show, setShow] = useState(false);
   const [login, { loading }] = useMutation(LOGIN_USER);
+
   const {
     register,
     handleSubmit,

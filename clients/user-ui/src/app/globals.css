@@ -63,3 +63,22 @@ input::-webkit-inner-spin-button {
     transform: translateX(0);
   }
 }
+.banner {
+  background-image: url("https://framerusercontent.com/images/ox1tg69dwg5TMb6flK8EvAlTY.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.backdrop_shaders {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #180f34 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  flex: none;
+  inset: -273px 290px 51px -557px;
+  overflow: hidden;
+  position: absolute;
+  top: 90px;
+  z-index: -1;
+}
