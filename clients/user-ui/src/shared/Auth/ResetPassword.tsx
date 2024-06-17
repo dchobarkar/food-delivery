@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 import styles from "@/src/utils/style";
 import { RESET_PASSWORD } from "@/src/graphql/actions/reset-password.action";
@@ -33,9 +33,9 @@ const ResetPassword = ({
 }: {
   activationToken: string | string[];
 }) => {
-  const [resetPassword, { loading }] = useMutation(RESET_PASSWORD);
   const [show, setShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+  const [resetPassword, { loading }] = useMutation(RESET_PASSWORD);
   const {
     register,
     handleSubmit,

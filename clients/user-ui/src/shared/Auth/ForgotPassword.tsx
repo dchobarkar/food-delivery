@@ -1,8 +1,8 @@
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
-import toast from "react-hot-toast";
 
 import styles from "@/src/utils/style";
 import { FORGOT_PASSWORD } from "@/src/graphql/actions/forgot-password.action";

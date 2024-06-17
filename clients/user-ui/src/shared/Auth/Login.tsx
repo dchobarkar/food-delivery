@@ -1,19 +1,19 @@
-import React, { useState } from "react";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
 import {
   AiFillGithub,
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LOGIN_USER } from "@/src/graphql/actions/login.action";
 import styles from "@/src/utils/style";
+import { LOGIN_USER } from "@/src/graphql/actions/login.action";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -53,8 +53,10 @@ const Login = ({
 
       if (response.data.Login.user) {
         toast.success("Login Successful");
+
         Cookies.set("refresh_token", response.data.Login.refreshToken);
         Cookies.set("access_token", response.data.Login.accessToken);
+
         setOpen(false);
         reset();
         window.location.reload();

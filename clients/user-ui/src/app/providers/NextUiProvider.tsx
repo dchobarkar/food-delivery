@@ -1,9 +1,9 @@
 "use client";
 
-import { ApolloProvider } from "@apollo/client";
-import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
+import { ApolloProvider } from "@apollo/client";
+import { NextUIProvider } from "@nextui-org/react";
 
 import { graphqlClient } from "@/src/graphql/gql.setup";
 

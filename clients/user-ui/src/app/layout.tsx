@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 import Toaster from "react-hot-toast";
+import { Poppins } from "next/font/google";
 
 import { Providers } from "./providers/NextUiProvider";
 import "./globals.css";

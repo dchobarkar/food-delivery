@@ -2,6 +2,7 @@ import React from "react";
 
 import styles from "@/src/utils/style";
 import NavItems from "../NavItems";
+import ProfileDropDown from "../ProfileDropDown";
 
 const Header = () => {
   return (
@@ -10,6 +11,8 @@ const Header = () => {
         <h1 className={`${styles.logo}`}>DarshanWebDev</h1>
 
         <NavItems />
+
+        <ProfileDropDown />
       </div>
     </header>
   );

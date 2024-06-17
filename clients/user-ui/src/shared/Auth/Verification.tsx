@@ -1,10 +1,10 @@
+import toast from "react-hot-toast";
 import { FC, useRef, useState } from "react";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { useMutation } from "@apollo/client";
-import toast from "react-hot-toast";
 
-import { ACTIVATE_USER } from "@/src/graphql/actions/activation.action";
 import styles from "@/src/utils/style";
+import { ACTIVATE_USER } from "@/src/graphql/actions/activation.action";
 
 type Props = {
   setActiveState: (route: string) => void;

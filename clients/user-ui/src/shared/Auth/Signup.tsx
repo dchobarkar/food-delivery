@@ -1,15 +1,15 @@
-import React, { useState } from "react";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@apollo/client";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
 import {
   AiFillGithub,
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
 
 import styles from "@/src/utils/style";
 import { REGISTER_USER } from "@/src/graphql/actions/register.action";
@@ -30,6 +30,7 @@ const Signup = ({
 }: {
   setActiveState: (e: string) => void;
 }) => {
+  const [show, setShow] = useState(false);
   const [registerUserMutation, { loading }] = useMutation(REGISTER_USER);
   const {
     register,
@@ -39,7 +40,6 @@ const Signup = ({
   } = useForm<SignupSchema>({
     resolver: zodResolver(formSchema),
   });
-  const [show, setShow] = useState(false);
 
   const onSubmit = async (data: SignupSchema) => {
     try {
@@ -51,6 +51,7 @@ const Signup = ({
         "activation_token",
         response.data.register.activation_token
       );
+
       toast.success("Please check your email to activate your account!");
       reset();
       setActiveState("Verification");

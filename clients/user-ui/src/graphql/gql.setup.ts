@@ -1,10 +1,10 @@
+import Cookies from "js-cookie";
 import {
   ApolloClient,
   ApolloLink,
   InMemoryCache,
   createHttpLink,
 } from "@apollo/client";
-import Cookies from "js-cookie";
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_SERVER_URL,

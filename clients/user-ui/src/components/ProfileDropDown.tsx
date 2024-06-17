@@ -1,6 +1,10 @@
 "use client";
 
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
+import { CgProfile } from "react-icons/cg";
 import { useState, useEffect } from "react";
+import { signOut, useSession } from "next-auth/react";
 import {
   Avatar,
   Dropdown,
@@ -8,10 +12,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import Cookies from "js-cookie";
-import toast from "react-hot-toast";
-import { CgProfile } from "react-icons/cg";
-import { signOut, useSession } from "next-auth/react";
 
 import AuthScreen from "../screens/AuthScreen";
 import useUser from "../hooks/useUser";
