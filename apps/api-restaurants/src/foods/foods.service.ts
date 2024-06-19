@@ -5,7 +5,7 @@ import { ConfigService } from "@nestjs/config";
 import { CreateFoodDto, DeleteFoodDto } from "./dto/foods.dto";
 import { EmailService } from "../email/email.service";
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
-import { PrismaService } from "@/api-restuarants/prisma/prisma.service";
+import { PrismaService } from "@/api-restaurants/prisma/prisma.service";
 
 type Images = {
   public_id: string;

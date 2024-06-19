@@ -12,7 +12,7 @@ async function bootstrap() {
   app.use(express.json({ limit: "50mb" }));
   app.useStaticAssets(join(__dirname, "..", "public"));
   app.setBaseViewsDir(
-    join(__dirname, "..", "apps/api-restuarants/email-templates")
+    join(__dirname, "..", "apps/api-restaurants/email-templates")
   );
   app.setViewEngine("ejs");
 
