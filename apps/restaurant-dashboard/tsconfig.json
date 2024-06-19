@@ -35,8 +35,8 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    "../../apps/restuarant-dashboard/.next/types/**/*.ts",
-    "../../dist/apps/restuarant-dashboard/.next/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "../../dist/apps/restaurant-dashboard/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],

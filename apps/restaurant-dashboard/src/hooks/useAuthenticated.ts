@@ -1,4 +1,4 @@
-import useRestaurant from "../hooks/useRestaurant";
+import useRestaurant from "./useRestaurant";
 
 export default function useAuthenticated() {
   const { restaurant } = useRestaurant();
