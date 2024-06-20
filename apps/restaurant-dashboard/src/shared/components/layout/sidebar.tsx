@@ -9,14 +9,14 @@ const Sidebar = () => {
       <div className="p-3 flex flex-col justify-around h-screen">
         <div className="w-[90%] flex flex-col items-center">
           <Image
-            src={"https://avatars.githubusercontent.com/u/87035691?v=4"}
+            src={"https://darshanwebdev.com/images/logo.png"}
             alt="profile-pic"
             width={120}
             height={120}
             className="rounded-full border-3 border-[rgb(91_111_230)]"
           />
 
-          <h5 className="pt-3 text-2xl">Pizzahut</h5>
+          <h5 className="pt-3 text-2xl">FoodPanda</h5>
         </div>
 
         <SideNav />

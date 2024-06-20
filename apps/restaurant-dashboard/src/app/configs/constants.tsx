@@ -3,7 +3,6 @@ import { atom } from "jotai";
 import { Icons } from "../../utils/Icon";
 
 export const activeItem = atom<string>("/");
-
 export const sideBarItems: SideBarItemsTypes[] = [
   {
     title: "Dashboard",

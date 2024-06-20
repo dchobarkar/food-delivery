@@ -1,7 +1,7 @@
-import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
 import { headers } from "next/headers";
+import { Toaster } from "react-hot-toast";
+import { Inter, Poppins } from "next/font/google";
 
 import { Providers } from "./(providers)/providers";
 import Sidebar from "../shared/components/layout/sidebar";
@@ -25,20 +25,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const heads = headers();
-  const pathname = heads.get("next-url");
+  const pathName = heads.get("next-url");
 
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${inter.variable}`}>
         <Providers>
           <div className="w-full flex">
-            {pathname !== "/login" &&
-              pathname !== "/register" &&
-              pathname !== "/activate-account/[key]" && (
+            {pathName !== "/login" &&
+              pathName !== "/register" &&
+              pathName !== "/activate-account/[key]" && (
                 <div className="w-[350px] h-screen sticky top-0 left-0 z-50">
                   <Sidebar />
                 </div>
               )}
+
             {children}
           </div>
         </Providers>
