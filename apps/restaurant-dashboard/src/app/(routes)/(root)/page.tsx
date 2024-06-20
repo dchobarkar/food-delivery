@@ -1,5 +1,5 @@
-import DashboardData from "../../../shared/modules/dashboard/dashboard.data";
 import DashboardOverview from "../../../shared/modules/dashboard/dashboard.overview";
+import DashboardData from "../../../shared/modules/dashboard/dashboard.data";
 
 const Page = () => {
   return (

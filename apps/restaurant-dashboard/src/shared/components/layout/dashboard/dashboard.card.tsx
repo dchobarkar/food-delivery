@@ -4,7 +4,7 @@ const DashboardCard = (props: DashboardCardType) => {
   const { title, icon, percentenge, amount, color } = props;
 
   return (
-    <div className="md:w-[320px] xl:w-[420px] bg-[#111C42] rounded p-5">
+    <div className="md:w-[320px] xl:w-[420px] bg-[#111C42] rounded p-5 my-2">
       <div className="flex w-full justify-between items-center">
         <div>
           <span className="md:text-3xl xl:text-4xl text-[#46CBA0]">{icon}</span>

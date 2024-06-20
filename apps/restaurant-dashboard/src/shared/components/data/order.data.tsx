@@ -1,4 +1,5 @@
 "use client";
+
 import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
@@ -21,11 +22,11 @@ const OrdersData = ({ isDashboard }: { isDashboard?: boolean }) => {
   [...Array(10)].map((i: OrdersDataType) => {
     rows.push({
       id: "123",
-      name: "shahriar sajeeb",
-      email: "support@becodemy.com",
-      title: "Juicy chicken burger",
+      name: "Darshan Chobarkar",
+      email: "contact@darshanwebdev.com",
+      title: "Paneer Cheese Biryani",
       price: "12$",
-      createdAt: "2days ago",
+      createdAt: "2 days ago",
     });
   });
 

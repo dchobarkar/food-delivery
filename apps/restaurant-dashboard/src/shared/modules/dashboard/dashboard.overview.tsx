@@ -5,7 +5,7 @@ import { Icons } from "../../../utils/Icon";
 
 const DashboardOverview = () => {
   return (
-    <div className="w-full flex items-center px-8 py-6 justify-between flex-wrap">
+    <div className="w-full flex items-center px-8 py-6 my-2 justify-between flex-wrap">
       <DashboardCard
         icon={Icons.overview}
         title="Sells Overview"

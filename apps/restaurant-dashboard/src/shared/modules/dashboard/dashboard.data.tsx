@@ -1,5 +1,5 @@
-import InvoiceCharts from "../../components/charts/invoice.charts";
 import OrdersData from "../../components/data/order.data";
+import InvoiceCharts from "../../components/charts/invoice.charts";
 
 const DashboardData = () => {
   return (
