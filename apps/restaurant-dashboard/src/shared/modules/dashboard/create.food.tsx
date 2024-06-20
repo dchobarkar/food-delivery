@@ -1,11 +1,11 @@
 "use client";
 
 import { ChangeEvent, DragEvent, useState } from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -38,31 +38,37 @@ const CreateFood = () => {
   });
 
   const onSubmit = async (data: createFoodSchema) => {
-    await createFoodMutation({
-      variables: {
-        createFoodDto: {
-          name: data.name,
-          description: data.description,
-          category: data.category,
-          price: data.price,
-          estimatedPrice: data.estimatedPrice,
-          images: data.images,
+    try {
+      await createFoodMutation({
+        variables: {
+          createFoodDto: {
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            price: data.price,
+            estimatedPrice: data.estimatedPrice,
+            images: data.images,
+          },
         },
-      },
-    }).then((res) => {
-      toast.success("Food uploaded successfully!");
-      reset();
-      redirect("/foods");
-    });
+      }).then((res) => {
+        toast.success("Food uploaded successfully!");
+        reset();
+        redirect("/foods");
+      });
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const handleDragOver = (e: DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
+
     setDragging(true);
   };
 
   const handleDragLeave = (e: DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
+
     setDragging(false);
   };
 
@@ -90,6 +96,7 @@ const CreateFood = () => {
   // For drag and drop feature
   const handleImageDrop = (e: DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
+
     setDragging(false);
 
     if (e.dataTransfer.files) {
@@ -121,7 +128,7 @@ const CreateFood = () => {
             <input
               {...register("name")}
               type="text"
-              placeholder="BBQ Chicken Pizza"
+              placeholder="Paneer Cheese Biryani"
               className="input"
             />
 
@@ -139,7 +146,7 @@ const CreateFood = () => {
               {...register("description")}
               rows={8}
               cols={25}
-              placeholder="This BBQ chicken pizza has spicy barbecue sauce, diced chicken, peppers, onion, and cilantro, all covered with cheese and baked to bubbly goodness! This is similar to a recipe I had at a popular pizza place in California. My family loves it!"
+              placeholder="This Paneer Cheese Biryani has spicy barbecue sauce, peppers, onion, and cilantro, all covered with cheese and baked to bubbly goodness! This is similar to a recipe I had at a popular pizza place in California. My family loves it!"
               className="input !h-[unset] !p-2"
             />
 
@@ -200,9 +207,9 @@ const CreateFood = () => {
                 setValue("category", e.target.value);
               }}
             >
-              {foodCategoryItems.map((i: FoodCategoryType) => (
-                <option value={i.title} key={i.title}>
-                  {i.title}
+              {foodCategoryItems.map((item: FoodCategoryType) => (
+                <option value={item.title} key={item.title}>
+                  {item.title}
                 </option>
               ))}
             </select>
@@ -219,11 +226,11 @@ const CreateFood = () => {
 
             <div className="w-full">
               <input
+                id="file"
                 type="file"
                 required
                 accept="image/*"
                 multiple
-                id="file"
                 className="hidden"
                 onChange={handleImageFileChange}
               />
@@ -239,13 +246,13 @@ const CreateFood = () => {
               >
                 {watch("images") ? (
                   <>
-                    {watch("images")?.map((i: string) => (
+                    {watch("images")?.map((img: string) => (
                       <Image
-                        src={i}
+                        key={img}
+                        src={img}
                         alt=""
                         width={300}
                         height={300}
-                        key={i}
                         className="w-full md:w-[48%] object-cover md:m-2 my-2"
                       />
                     ))}
