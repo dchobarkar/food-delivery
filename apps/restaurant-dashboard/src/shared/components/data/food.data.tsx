@@ -1,7 +1,7 @@
 "use client";
 
-import { format } from "timeago.js";
 import toast from "react-hot-toast";
+import { format } from "timeago.js";
 import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
@@ -17,19 +17,19 @@ const FoodData = () => {
   const foods = data?.getLoggedInRestaurantFoods?.foods;
 
   const handleDeleteFood = async (e: string) => {
-    await DeleteFood({
-      variables: {
-        id: e,
-      },
-      refetchQueries: [{ query: GET_FOODS }],
-    })
-      .then((res) => {
+    try {
+      await DeleteFood({
+        variables: {
+          id: e,
+        },
+        refetchQueries: [{ query: GET_FOODS }],
+      }).then((res) => {
         toast.success("Your Food Deleted successfully!");
         refetch();
-      })
-      .catch((error) => {
-        console.log(error);
       });
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const columns: GridColDef<FoodsDataType>[] = [
@@ -59,13 +59,13 @@ const FoodData = () => {
 
   const rows: FoodsDataType[] = [];
 
-  foods?.map((i: FoodsDataType) => {
+  foods?.map((item: FoodsDataType) => {
     rows.push({
-      id: i.id,
-      name: i.name,
-      price: i.price + "$",
+      id: item.id,
+      name: item.name,
+      price: item.price + "$",
       totalOrders: 10,
-      createdAt: format(i.createdAt),
+      createdAt: format(item.createdAt),
     });
   });
 
