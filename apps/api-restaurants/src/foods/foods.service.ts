@@ -1,11 +1,9 @@
 import { Response } from "express";
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 
 import { CreateFoodDto, DeleteFoodDto } from "./dto/foods.dto";
-import { EmailService } from "../email/email.service";
-import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { PrismaService } from "@/api-restaurants/prisma/prisma.service";
+import { CloudinaryService } from "../cloudinary/cloudinary.service";
 
 type Images = {
   public_id: string;
@@ -25,8 +23,6 @@ type Food = {
 export class FoodsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
-    private readonly emailService: EmailService,
     private readonly cloudinaryService: CloudinaryService
   ) {}
   // Create food
@@ -35,7 +31,6 @@ export class FoodsService {
       const { name, description, price, estimatedPrice, category, images } =
         createFoodDto as Food;
       const restaurantId = req.restaurant?.id;
-
       let foodImages: Images | any = [];
 
       for (const image of images) {
@@ -91,6 +86,7 @@ export class FoodsService {
         createdAt: "desc",
       },
     });
+
     return { foods };
   }
 
@@ -108,9 +104,8 @@ export class FoodsService {
       },
     });
 
-    if (food.restaurant.id !== restaurantId) {
+    if (food.restaurant.id !== restaurantId)
       throw Error("Only Restaurant owner can delete food!");
-    }
 
     // Manually delete the related images
     await this.prisma.images.deleteMany({

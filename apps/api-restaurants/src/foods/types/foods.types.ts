@@ -1,5 +1,5 @@
-import { Field, ObjectType } from "@nestjs/graphql";
 import { Foods } from "prisma/prisma-client";
+import { Field, ObjectType } from "@nestjs/graphql";
 
 import { Food } from "../entities/foods.entities";
 import { ErrorType } from "../../types/restaurant.type";
