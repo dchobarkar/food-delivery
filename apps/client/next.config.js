@@ -1,13 +1,13 @@
 //@ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { composePlugins, withNx } = require('@nx/next');
+const { composePlugins, withNx } = require("@nx/next");
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
-  experimental:{
+  experimental: {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     serverActions: true,
