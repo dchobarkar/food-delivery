@@ -3,6 +3,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { IntrospectAndCompose } from "@apollo/gateway";
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from "@nestjs/apollo";
 
+import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
 @Module({
@@ -21,7 +22,7 @@ import { AppService } from "./app.service";
       },
     }),
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
