@@ -1,4 +1,4 @@
-import { ObjectType, Field, Directive } from '@nestjs/graphql';
+import { ObjectType, Field, Directive } from "@nestjs/graphql";
 
 @ObjectType()
 @Directive('@key(fields:"id")')
@@ -13,7 +13,7 @@ export class Avatars {
   url: string;
 
   @Field()
-  sellerId: string;
+  seller_id: string;
 }
 
 @ObjectType()
@@ -46,8 +46,8 @@ export class Restaurant {
   password: string;
 
   @Field()
-  createdAt?: Date;
+  created_at?: Date;
 
   @Field()
-  updatedAt?: Date;
+  updated_at?: Date;
 }

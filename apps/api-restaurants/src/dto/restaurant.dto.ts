@@ -4,38 +4,38 @@ import { InputType, Field } from "@nestjs/graphql";
 @InputType()
 export class RegisterDto {
   @Field()
-  @IsNotEmpty({ message: "Restaurant Name is required." })
-  @IsString({ message: "Restaurant Name must need to be one string." })
+  @IsNotEmpty({ message: "Restaurant name is required." })
+  @IsString({ message: "Restaurant name must be a string." })
   name: string;
 
   @Field()
   @IsNotEmpty({ message: "Restaurant country is required." })
-  @IsString({ message: "Restaurant country must need to be one string." })
+  @IsString({ message: "Restaurant country must be a string." })
   country: string;
 
   @Field()
   @IsNotEmpty({ message: "Restaurant city is required." })
-  @IsString({ message: "Restaurant city must need to be one string." })
+  @IsString({ message: "Restaurant city must be a string." })
   city: string;
 
   @Field()
-  @IsNotEmpty({ message: "Restaurant city is required." })
-  @IsString({ message: "Restaurant city must need to be one string." })
+  @IsNotEmpty({ message: "Restaurant address is required." })
+  @IsString({ message: "Restaurant address must be a string." })
   address: string;
 
   @Field()
-  @IsNotEmpty({ message: "Restaurant Email is required." })
-  @IsEmail({}, { message: "Restaurant Email is invalid." })
+  @IsNotEmpty({ message: "Restaurant email is required." })
+  @IsEmail({}, { message: "Email is invalid." })
   email: string;
 
   @Field()
-  @IsNotEmpty({ message: "Restaurant Phone Number is required." })
+  @IsNotEmpty({ message: "Restaurant phone number is required." })
   phone_number: number;
 
   @Field()
-  @IsNotEmpty({ message: "Restaurant Password is required." })
+  @IsNotEmpty({ message: "Password is required." })
   @MinLength(8, {
-    message: "Restaurant Password must be at least 8 characters.",
+    message: "Password must be at least 8 characters long.",
   })
   password: string;
 }
@@ -43,15 +43,15 @@ export class RegisterDto {
 @InputType()
 export class ActivationDto {
   @Field()
-  @IsNotEmpty({ message: "Activation Token is required." })
-  activationToken: string;
+  @IsNotEmpty({ message: "Activation token is required." })
+  activation_token: string;
 }
 
 @InputType()
 export class LoginDto {
   @Field()
   @IsNotEmpty({ message: "Email is required." })
-  @IsEmail({}, { message: "Email must be valid." })
+  @IsEmail({}, { message: "Invalid email." })
   email: string;
 
   @Field()

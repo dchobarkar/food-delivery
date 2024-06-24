@@ -24,7 +24,7 @@ export class Food {
   price: number;
 
   @Field()
-  estimatedPrice: number;
+  estimated_price: number;
 
   @Field()
   category: string;
@@ -33,11 +33,11 @@ export class Food {
   images: Images[];
 
   @Field()
-  restaurantId: string;
+  restaurant_id: string;
 
   @Field()
-  createdAt?: Date;
+  created_at?: Date;
 
   @Field()
-  updatedAt?: Date;
+  updated_at?: Date;
 }

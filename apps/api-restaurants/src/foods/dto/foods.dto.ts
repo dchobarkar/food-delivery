@@ -4,13 +4,13 @@ import { Field, InputType } from "@nestjs/graphql";
 @InputType()
 export class CreateFoodDto {
   @Field()
-  @IsNotEmpty({ message: "Food Name is required." })
-  @IsString({ message: "Food Name must need to be a string." })
+  @IsNotEmpty({ message: "Food name is required." })
+  @IsString({ message: "Food name must be a string." })
   name: string;
 
   @Field()
   @IsNotEmpty({ message: "Food description is required." })
-  @IsString({ message: "Food description must need to be string." })
+  @IsString({ message: "Food description must be string." })
   description: string;
 
   @Field()
@@ -19,11 +19,11 @@ export class CreateFoodDto {
 
   @Field()
   @IsNotEmpty({ message: "Food estimated price is required." })
-  estimatedPrice: number;
+  estimated_price: number;
 
   @Field()
   @IsNotEmpty({ message: "Food category is required." })
-  @IsString({ message: "Food category must need to be a string." })
+  @IsString({ message: "Food category must be a string." })
   category: string;
 
   @Field(() => [String])
@@ -36,6 +36,6 @@ export class CreateFoodDto {
 export class DeleteFoodDto {
   @Field()
   @IsNotEmpty({ message: "Food id is required." })
-  @IsString({ message: "Food id must need to be a string." })
+  @IsString({ message: "Food id must be a string." })
   id: string;
 }
