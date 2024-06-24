@@ -14,8 +14,8 @@ import { PrismaService } from "../../prisma/prisma.service";
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService,
-    private readonly config: ConfigService
+    private readonly prismaService: PrismaService,
+    private readonly configService: ConfigService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

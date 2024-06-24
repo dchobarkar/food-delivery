@@ -15,6 +15,7 @@ import { FoodsService } from "./foods.service";
 export class FoodsResolver {
   constructor(private readonly foodsService: FoodsService) {}
 
+  // Create new food
   @Mutation(() => CreateFoodResponse)
   @UseGuards(AuthGuard)
   async createFood(
@@ -28,6 +29,7 @@ export class FoodsResolver {
     );
   }
 
+  // Get current restaurant all foods
   @Query(() => LoggedInRestaurantFoodResponse)
   @UseGuards(AuthGuard)
   async getLoggedInRestaurantFoods(
@@ -39,6 +41,7 @@ export class FoodsResolver {
     );
   }
 
+  // Delete food of a restaurant
   @Mutation(() => DeleteFoodResponse)
   @UseGuards(AuthGuard)
   async deleteFood(

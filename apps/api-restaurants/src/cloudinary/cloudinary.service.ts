@@ -3,7 +3,7 @@ import {
   UploadApiResponse,
   v2 as cloudinary,
 } from "cloudinary";
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 
 type CloudinaryResponse = UploadApiResponse | UploadApiErrorResponse;
 
@@ -17,7 +17,7 @@ export class CloudinaryService {
 
       return result;
     } catch (error) {
-      throw error;
+      throw new InternalServerErrorException(error);
     }
   }
 }

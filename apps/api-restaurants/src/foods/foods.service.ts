@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 
 import { CreateFoodDto, DeleteFoodDto } from "./dto/foods.dto";
 import { PrismaService } from "@/api-restaurants/prisma/prisma.service";
@@ -14,7 +14,7 @@ type Food = {
   name: string;
   description: string;
   price: number;
-  estimatedPrice: number;
+  estimated_price: number;
   category: string;
   images: Images[] | any;
 };
@@ -22,13 +22,13 @@ type Food = {
 @Injectable()
 export class FoodsService {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly cloudinaryService: CloudinaryService
   ) {}
-  // Create food
+  // Create new food
   async createFood(createFoodDto: CreateFoodDto, req: any, response: Response) {
     try {
-      const { name, description, price, estimatedPrice, category, images } =
+      const { name, description, price, estimated_price, category, images } =
         createFoodDto as Food;
       const restaurantId = req.restaurant?.id;
       let foodImages: Images | any = [];
@@ -47,7 +47,7 @@ export class FoodsService {
         name,
         description,
         price,
-        estimatedPrice,
+        estimated_price,
         category,
         images: {
           create: foodImages.map(
@@ -57,10 +57,10 @@ export class FoodsService {
             })
           ),
         },
-        restaurantId,
+        restaurant_id: restaurantId,
       };
 
-      await this.prisma.foods.create({
+      await this.prismaService.foods.create({
         data: foodData,
       });
 
@@ -70,31 +70,33 @@ export class FoodsService {
     }
   }
 
-  // Get all restaurant foods
+  // Get current restaurant all foods
   async getLoggedInRestuarantFood(req: any, res: Response) {
     const restaurantId = req.restaurant?.id;
 
-    const foods = await this.prisma.foods.findMany({
-      where: {
-        restaurantId,
-      },
-      include: {
-        images: true,
-        restaurant: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    return { foods };
+    try {
+      return await this.prismaService.foods.findMany({
+        where: {
+          restaurantId,
+        },
+        include: {
+          images: true,
+          restaurant: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
-  // Delete foods of a restaurant
+  // Delete food of a restaurant
   async deleteFood(deleteFoodDto: DeleteFoodDto, req: any) {
     const restaurantId = req.restaurant?.id;
 
-    const food = await this.prisma.foods.findUnique({
+    const food = await this.prismaService.foods.findUnique({
       where: {
         id: deleteFoodDto.id,
       },
@@ -105,21 +107,22 @@ export class FoodsService {
     });
 
     if (food.restaurant.id !== restaurantId)
-      throw Error("Only Restaurant owner can delete food!");
+      throw Error("Only restaurant owner can delete the food!");
 
-    // Manually delete the related images
-    await this.prisma.images.deleteMany({
+    // Delete the related images
+    await this.prismaService.images.deleteMany({
       where: {
         foodId: deleteFoodDto.id,
       },
     });
 
-    await this.prisma.foods.delete({
+    // Delete the food data
+    await this.prismaService.foods.delete({
       where: {
         id: deleteFoodDto.id,
       },
     });
 
-    return { message: "Food Deleted successfully!" };
+    return { message: "Food deleted successfully!" };
   }
 }
