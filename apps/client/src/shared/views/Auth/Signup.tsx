@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 
-import { REGISTER_USER } from "../../../graphql/actions/register.action";
+import { REGISTER_USER } from "../../../graphql/actions/register-user.action";
 import styles from "../../../utils/styles";
 
 const formSchema = z.object({

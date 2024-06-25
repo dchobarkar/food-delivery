@@ -12,8 +12,8 @@ export const GET_USER: DocumentNode = gql`
         address
         password
       }
-      accessToken
-      refreshToken
+      access_token
+      refresh_token
     }
   }
 `;

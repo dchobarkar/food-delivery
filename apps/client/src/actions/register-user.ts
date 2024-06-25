@@ -4,6 +4,29 @@ import * as bcrypt from "bcrypt";
 
 import prisma from "../lib/prismaDb";
 
+// Register new user
+export const registerUser = async (userData: any) => {
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email: userData.email,
+    },
+  });
+  if (isUserExist) return isUserExist;
+
+  const password = generateRandomPassword();
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  return await prisma.user.create({
+    data: {
+      name: userData.name,
+      email: userData.email,
+      password: hashedPassword,
+      role: "User",
+    },
+  });
+};
+
+// Create random password
 const generateRandomPassword = () => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-_=+";
@@ -17,27 +40,4 @@ const generateRandomPassword = () => {
   }
 
   return password;
-};
-
-export const registerUser = async (userData: any) => {
-  const isUserExist = await prisma.user.findUnique({
-    where: {
-      email: userData.email,
-    },
-  });
-  if (isUserExist) return isUserExist;
-
-  const password = generateRandomPassword();
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await prisma.user.create({
-    data: {
-      name: userData.name,
-      email: userData.email,
-      password: hashedPassword,
-      role: "User",
-    },
-  });
-
-  return user;
 };

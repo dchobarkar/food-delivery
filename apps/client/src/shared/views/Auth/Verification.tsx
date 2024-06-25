@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { useMutation } from "@apollo/client";
 
-import { ACTIVATE_USER } from "../../../graphql/actions/activation.action";
+import { ACTIVATE_USER } from "../../../graphql/actions/activate-user.action";
 import styles from "../../../utils/styles";
 
 type Props = {

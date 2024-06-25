@@ -13,8 +13,8 @@ export const LOGIN_USER: DocumentNode = gql`
         address
         phone_number
       }
-      accessToken
-      refreshToken
+      access_token
+      refresh_token
       error {
         message
       }

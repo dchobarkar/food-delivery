@@ -13,8 +13,8 @@ const httpLink = createHttpLink({
 const authMiddleware = new ApolloLink((oparetion, forward) => {
   oparetion.setContext({
     headers: {
-      accesstoken: Cookies.get("access_token"),
-      refreshtoken: Cookies.get("refresh_token"),
+      access_token: Cookies.get("access_token"),
+      refresh_token: Cookies.get("refresh_token"),
     },
   });
 

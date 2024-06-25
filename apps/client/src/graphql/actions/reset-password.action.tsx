@@ -1,11 +1,11 @@
 import { gql, DocumentNode } from "@apollo/client";
 
 export const RESET_PASSWORD: DocumentNode = gql`
-  mutation resetPassword($password: String!, $activationToken: String!) {
+  mutation resetPassword($password: String!, $activation_token: String!) {
     resetPassword(
       resetPasswordDto: {
         password: $password
-        activationToken: $activationToken
+        activation_token: $activation_token
       }
     ) {
       user {
