@@ -27,11 +27,11 @@ import { PrismaService } from "../prisma/prisma.service";
   ],
   controllers: [],
   providers: [
-    UsersService,
     ConfigService,
     JwtService,
     PrismaService,
     UsersResolver,
+    UsersService,
   ],
 })
 export class UsersModule {}

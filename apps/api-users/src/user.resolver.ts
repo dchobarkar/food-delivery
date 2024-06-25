@@ -24,21 +24,19 @@ import { UsersService } from "./user.service";
 export class UsersResolver {
   constructor(private readonly userService: UsersService) {}
 
+  // Create new user
   @Mutation(() => RegisterResponse)
   async register(
     @Args("registerDto") registerDto: RegisterDto,
     @Context() context: { res: Response }
   ): Promise<RegisterResponse> {
     if (!registerDto.name || !registerDto.email || !registerDto.password)
-      throw new BadRequestException("Please fill the all fields");
+      throw new BadRequestException("Please fill all the fields");
 
-    const { activation_token } = await this.userService.register(
-      registerDto,
-      context.res
-    );
-    return { activation_token };
+    return await this.userService.register(registerDto, context.res);
   }
 
+  // Activate current user
   @Mutation(() => ActivationResponse)
   async activateUser(
     @Args("activationDto") activationDto: ActivationDto,
@@ -47,6 +45,7 @@ export class UsersResolver {
     return await this.userService.activateUser(activationDto, context.res);
   }
 
+  // Login user
   @Mutation(() => LoginResponse)
   async Login(
     @Args("email") email: string,
@@ -55,12 +54,14 @@ export class UsersResolver {
     return await this.userService.Login({ email, password });
   }
 
+  // Get logged in user
   @Query(() => LoginResponse)
   @UseGuards(AuthGuard)
   async getLoggedInUser(@Context() context: { req: Request }) {
     return await this.userService.getLoggedInUser(context.req);
   }
 
+  // Forgot password
   @Mutation(() => ForgotPasswordResponse)
   async forgotPassword(
     @Args("forgotPasswordDto") forgotPasswordDto: ForgotPasswordDto
@@ -68,6 +69,7 @@ export class UsersResolver {
     return await this.userService.forgotPassword(forgotPasswordDto);
   }
 
+  // Reset password
   @Mutation(() => ResetPasswordResponse)
   async resetPassword(
     @Args("resetPasswordDto") resetPasswordDto: ResetPasswordDto
@@ -75,12 +77,14 @@ export class UsersResolver {
     return await this.userService.resetPassword(resetPasswordDto);
   }
 
+  // Log out user
   @Query(() => LogoutResposne)
   @UseGuards(AuthGuard)
   async logOutUser(@Context() context: { req: Request }) {
     return await this.userService.Logout(context.req);
   }
 
+  // Get all users
   @Query(() => [User])
   async getUsers() {
     return this.userService.getUsers();

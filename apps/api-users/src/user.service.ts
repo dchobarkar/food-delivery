@@ -12,8 +12,8 @@ import {
   RegisterDto,
   ResetPasswordDto,
 } from "./dto/user.dto";
-import { EmailService } from "./email/email.service";
 import { PrismaService } from "../prisma/prisma.service";
+import { EmailService } from "./email/email.service";
 import { TokenSender } from "./utils/sendToken";
 
 interface UserData {
@@ -27,25 +27,25 @@ interface UserData {
 export class UsersService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService
   ) {}
 
-  // Register User Service
+  // Create new user
   async register(registerDto: RegisterDto, response: Response) {
     const { name, email, password, phone_number } = registerDto;
 
-    const isEmailExist = await this.prisma.user.findUnique({
+    const isEmailExist = await this.prismaService.user.findUnique({
       where: {
         email,
       },
     });
     if (isEmailExist)
-      throw new BadRequestException("User already exist with this email!");
+      throw new BadRequestException("User already exists with this email!");
 
     const phoneNumbersToCheck = [phone_number];
-    const usersWithPhoneNumber = await this.prisma.user.findMany({
+    const usersWithPhoneNumber = await this.prismaService.user.findMany({
       where: {
         phone_number: {
           not: null,
@@ -55,7 +55,7 @@ export class UsersService {
     });
     if (usersWithPhoneNumber.length > 0)
       throw new BadRequestException(
-        "User already exist with this phone number!"
+        "User already exists with this phone number!"
       );
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -67,19 +67,19 @@ export class UsersService {
       phone_number,
     };
 
-    const activationToken = await this.createActivationToken(user);
-    const activationCode = activationToken.activationCode;
-    const activation_token = activationToken.token;
+    const token = await this.createActivationToken(user);
+    const activationCode = token.activationCode;
+    const activationToken = token.token;
 
     await this.emailService.sendMail({
       email,
       subject: "Activate your account!",
       template: "./activation-mail",
       name,
-      activationCode,
+      activation_code: activationCode,
     });
 
-    return { activation_token, response };
+    return { activation_token: activationToken, response };
   }
 
   // Create activation token
@@ -96,32 +96,32 @@ export class UsersService {
         expiresIn: "5m",
       }
     );
+
     return { token, activationCode };
   }
 
-  // Activation user
+  // Activate current user
   async activateUser(activationDto: ActivationDto, response: Response) {
-    const { activationToken, activationCode } = activationDto;
-
+    const { activation_token, activation_code } = activationDto;
     const newUser: { user: UserData; activationCode: string } =
-      this.jwtService.verify(activationToken, {
+      this.jwtService.verify(activation_token, {
         secret: this.configService.get<string>("ACTIVATION_SECRET"),
       } as JwtVerifyOptions) as { user: UserData; activationCode: string };
 
-    if (newUser.activationCode !== activationCode)
+    if (newUser.activationCode !== activation_code)
       throw new BadRequestException("Invalid activation code");
 
     const { name, email, password, phone_number } = newUser.user;
 
-    const existUser = await this.prisma.user.findUnique({
+    const existUser = await this.prismaService.user.findUnique({
       where: {
         email,
       },
     });
     if (existUser)
-      throw new BadRequestException("User already exist with this email!");
+      throw new BadRequestException("User already exists with this email!");
 
-    const user = await this.prisma.user.create({
+    const user = await this.prismaService.user.create({
       data: {
         name,
         email,
@@ -133,10 +133,10 @@ export class UsersService {
     return { user, response };
   }
 
-  // Login service
+  // Login user
   async Login(loginDto: LoginDto) {
     const { email, password } = loginDto;
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         email,
       },
@@ -148,8 +148,8 @@ export class UsersService {
     } else {
       return {
         user: null,
-        accessToken: null,
-        refreshToken: null,
+        access_token: null,
+        refresh_token: null,
         error: {
           message: "Invalid email or password",
         },
@@ -165,25 +165,19 @@ export class UsersService {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  // Generate forgot password link
-  async generateForgotPasswordLink(user: User) {
-    const forgotPasswordToken = this.jwtService.sign(
-      {
-        user,
-      },
-      {
-        secret: this.configService.get<string>("FORGOT_PASSWORD_SECRET"),
-        expiresIn: "5m",
-      }
-    );
+  // Get logged in user
+  async getLoggedInUser(req: any) {
+    const user = req.user;
+    const refreshToken = req.refresh_token;
+    const accessToken = req.access_token;
 
-    return forgotPasswordToken;
+    return { user, refreshToken, accessToken };
   }
 
   // Forgot password
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         email,
       },
@@ -201,23 +195,35 @@ export class UsersService {
       subject: "Reset your Password!",
       template: "./forgot-password",
       name: user.name,
-      activationCode: resetPasswordUrl,
+      activation_code: resetPasswordUrl,
     });
 
     return { message: `Your forgot password request succesful!` };
   }
 
+  // Generate forgot password link
+  async generateForgotPasswordLink(user: User) {
+    return this.jwtService.sign(
+      {
+        user,
+      },
+      {
+        secret: this.configService.get<string>("FORGOT_PASSWORD_SECRET"),
+        expiresIn: "5m",
+      }
+    );
+  }
+
   // Reset password
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
-    const { password, activationToken } = resetPasswordDto;
-
-    const decoded = await this.jwtService.decode(activationToken);
+    const { password, activation_token } = resetPasswordDto;
+    const decoded = await this.jwtService.decode(activation_token);
 
     if (!decoded || decoded?.exp * 1000 < Date.now())
       throw new BadRequestException("Invalid token!");
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.prisma.user.update({
+    const user = await this.prismaService.user.update({
       where: {
         id: decoded.user.id,
       },
@@ -229,28 +235,17 @@ export class UsersService {
     return { user };
   }
 
-  // Get logged in user
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async getLoggedInUser(req: any) {
-    const user = req.user;
-    const refreshToken = req.refreshtoken;
-    const accessToken = req.accesstoken;
-
-    return { user, refreshToken, accessToken };
-  }
-
   // Log out user
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async Logout(req: any) {
     req.user = null;
-    req.refreshtoken = null;
-    req.accesstoken = null;
+    req.refresh_token = null;
+    req.access_token = null;
 
     return { message: "Logged out successfully!" };
   }
 
-  // Get all users service
+  // Get all users
   async getUsers() {
-    return this.prisma.user.findMany({});
+    return this.prismaService.user.findMany({});
   }
 }

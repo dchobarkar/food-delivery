@@ -4,26 +4,27 @@ import { User } from "@prisma/client";
 
 export class TokenSender {
   constructor(
-    private readonly config: ConfigService,
-    private readonly jwt: JwtService
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService
   ) {}
 
+  // Send access token and refresh token
   public sendToken(user: User) {
-    const accessToken = this.jwt.sign(
+    const accessToken = this.jwtService.sign(
       {
         id: user.id,
       },
       {
-        secret: this.config.get<string>("ACCESS_TOKEN_SECRET"),
+        secret: this.configService.get<string>("ACCESS_TOKEN_SECRET"),
         expiresIn: "1m",
       }
     );
-    const refreshToken = this.jwt.sign(
+    const refreshToken = this.jwtService.sign(
       {
         id: user.id,
       },
       {
-        secret: this.config.get<string>("REFRESH_TOKEN_SECRET"),
+        secret: this.configService.get<string>("REFRESH_TOKEN_SECRET"),
         expiresIn: "3d",
       }
     );
