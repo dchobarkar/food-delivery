@@ -30,8 +30,9 @@ const ProfileDropDown = () => {
       setsignedIn(true);
       addUser(data?.user);
     }
-  }, [loading, user, open, data]);
+  }, [loading, user, data]);
 
+  // Log out the user
   const logoutHandler = () => {
     if (data?.user) signOut();
     else {
@@ -42,6 +43,7 @@ const ProfileDropDown = () => {
     }
   };
 
+  // Create new user
   const addUser = async (user: any) => {
     await registerUser(user);
   };

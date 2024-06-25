@@ -28,6 +28,7 @@ const ForgotPassword = ({
     resolver: zodResolver(formSchema),
   });
 
+  // Reset password
   const onSubmit = async (data: ForgotPasswordSchema) => {
     try {
       await forgotPassword({
@@ -48,19 +49,18 @@ const ForgotPassword = ({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <label className={`${styles.label}`}>Enter your Email</label>
-
         <input
           {...register("email")}
           type="email"
           placeholder="loginmail@gmail.com"
           className={`${styles.input}`}
         />
-
         {errors.email && (
           <span className="text-red-500 block mt-1">
             {`${errors.email.message}`}
           </span>
         )}
+
         <br />
 
         <br />

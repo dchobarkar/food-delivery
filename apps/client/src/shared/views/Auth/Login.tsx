@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { z } from "zod";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import Cookies from "js-cookie";
 import { signIn } from "next-auth/react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -37,6 +37,7 @@ const Login = ({
     resolver: zodResolver(formSchema),
   });
 
+  // Log in user
   const onSubmit = async (data: LoginSchema) => {
     const loginData = {
       email: data.email,
@@ -45,10 +46,10 @@ const Login = ({
     const response = await Login({
       variables: loginData,
     });
-    if (response.data.Login.user) {
+    if (response?.data?.Login?.user) {
       toast.success("Login Successful!");
-      Cookies.set("refresh_token", response.data.Login.refreshToken);
-      Cookies.set("access_token", response.data.Login.accessToken);
+      Cookies.set("refresh_token", response.data.Login.refresh_token);
+      Cookies.set("access_token", response.data.Login.access_token);
       setOpen(false);
       reset();
       window.location.reload();
@@ -61,14 +62,12 @@ const Login = ({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <label className={`${styles.label}`}>Enter your Email</label>
-
         <input
           {...register("email")}
           type="email"
           placeholder="loginmail@gmail.com"
           className={`${styles.input}`}
         />
-
         {errors.email && (
           <span className="text-red-500 block mt-1">
             {`${errors.email.message}`}
@@ -79,14 +78,12 @@ const Login = ({
           <label htmlFor="password" className={`${styles.label}`}>
             Enter your password
           </label>
-
           <input
             {...register("password")}
             type={!show ? "password" : "text"}
             placeholder="password!@%"
             className={`${styles.input}`}
           />
-
           {!show ? (
             <AiOutlineEyeInvisible
               className="absolute bottom-3 right-2 z-1 cursor-pointer"
@@ -101,7 +98,6 @@ const Login = ({
             />
           )}
         </div>
-
         {errors.password && (
           <span className="text-red-500">{`${errors.password.message}`}</span>
         )}

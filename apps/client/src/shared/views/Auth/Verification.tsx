@@ -34,6 +34,7 @@ const Verification: FC<Props> = ({ setActiveState }) => {
     useRef<HTMLInputElement>(null),
   ];
 
+  // Activate user
   const verificationHandler = async () => {
     const verificationNumber = Object.values(verifyNumber).join("");
     const activationToken = localStorage.getItem("activation_token");
@@ -41,24 +42,25 @@ const Verification: FC<Props> = ({ setActiveState }) => {
     if (verificationNumber.length !== 4) {
       setInvalidError(true);
       return;
-    } else {
-      const data = {
-        activationToken,
-        activationCode: verificationNumber,
-      };
-      try {
-        await ActivateUser({
-          variables: data,
-        });
-        localStorage.removeItem("activation_token");
-        toast.success("Account activated successfully!");
-        setActiveState("Login");
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+    }
+
+    const data = {
+      activationToken,
+      activationCode: verificationNumber,
+    };
+    try {
+      await ActivateUser({
+        variables: data,
+      });
+      localStorage.removeItem("activation_token");
+      toast.success("Account activated successfully!");
+      setActiveState("Login");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
+  // Handle input
   const handleInputChange = (index: number, value: string) => {
     setInvalidError(false);
     const newVerifyNumber = { ...verifyNumber, [index]: value };

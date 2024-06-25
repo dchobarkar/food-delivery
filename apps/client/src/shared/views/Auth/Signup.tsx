@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 import {
   AiFillGithub,
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 
@@ -43,6 +43,7 @@ const Signup = ({
     resolver: zodResolver(formSchema),
   });
 
+  // Signup user
   const onSubmit = async (data: SignUpSchema) => {
     try {
       const response = await registerUserMutation({
@@ -67,7 +68,6 @@ const Signup = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full relative mb-3">
           <label className={`${styles.label}`}>Enter your Name</label>
-
           <input
             {...register("name")}
             type="text"
@@ -77,14 +77,12 @@ const Signup = ({
         </div>
 
         <label className={`${styles.label}`}>Enter your Email</label>
-
         <input
           {...register("email")}
           type="email"
           placeholder="loginmail@gmail.com"
           className={`${styles.input}`}
         />
-
         {errors.email && (
           <span className="text-red-500 block mt-1">
             {`${errors.email.message}`}
@@ -93,14 +91,12 @@ const Signup = ({
 
         <div className="w-full relative mt-3">
           <label className={`${styles.label}`}>Enter your Phone Number</label>
-
           <input
             {...register("phone_number", { valueAsNumber: true })}
             type="number"
-            placeholder="+8801*******"
+            placeholder="+91 01*******"
             className={`${styles.input}`}
           />
-
           {errors.phone_number && (
             <span className="text-red-500 block mt-1">
               {`${errors.phone_number.message}`}
@@ -112,14 +108,12 @@ const Signup = ({
           <label htmlFor="password" className={`${styles.label}`}>
             Enter your password
           </label>
-
           <input
             {...register("password")}
             type={!show ? "password" : "text"}
             placeholder="password!@%"
             className={`${styles.input}`}
           />
-
           {!show ? (
             <AiOutlineEyeInvisible
               className="absolute bottom-3 right-2 z-1 cursor-pointer"
@@ -134,7 +128,6 @@ const Signup = ({
             />
           )}
         </div>
-
         {errors.password && (
           <span className="text-red-500 mt-1">{`${errors.password.message}`}</span>
         )}
@@ -156,8 +149,6 @@ const Signup = ({
 
         <div className="flex items-center justify-center my-3">
           <FcGoogle size={30} className="cursor-pointer mr-2" />
-
-          <AiFillGithub size={30} className="cursor-pointer ml-2" />
         </div>
 
         <h5 className="text-center pt-4 font-Poppins text-[14px]">
