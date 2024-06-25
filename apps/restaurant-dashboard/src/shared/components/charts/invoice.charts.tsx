@@ -11,12 +11,12 @@ import {
 
 const InvoiceCharts = () => {
   const analyticsData = [
-    { name: "Jan 23", count: 700 },
-    { name: "Feb 23", count: 900 },
-    { name: "Mar 23", count: 400 },
-    { name: "Apr 23", count: 800 },
-    { name: "May 23", count: 400 },
-    { name: "Jun 23", count: 800 },
+    { name: "Jan 24", count: 700 },
+    { name: "Feb 24", count: 900 },
+    { name: "Mar 24", count: 400 },
+    { name: "Apr 24", count: 800 },
+    { name: "May 24", count: 400 },
+    { name: "Jun 24", count: 800 },
   ];
 
   return (

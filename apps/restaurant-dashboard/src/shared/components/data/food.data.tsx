@@ -6,9 +6,9 @@ import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
 
+import { GET_FOODS } from "../../../graphql/actions/get-foods.action";
+import { DELETE_FOOD } from "../../../graphql/actions/delete-food.action";
 import Loader from "../layout/loader";
-import { GET_FOODS } from "../../../graphql/actions/get.foods";
-import { DELETE_FOOD } from "../../../graphql/actions/delete.food";
 import { Icons } from "../../../utils/Icon";
 
 const FoodData = () => {
@@ -16,11 +16,11 @@ const FoodData = () => {
   const { data, loading, refetch } = useQuery(GET_FOODS);
   const foods = data?.getLoggedInRestaurantFoods?.foods;
 
-  const handleDeleteFood = async (e: string) => {
+  const handleDeleteFood = async (id: string) => {
     try {
       await DeleteFood({
         variables: {
-          id: e,
+          id,
         },
         refetchQueries: [{ query: GET_FOODS }],
       }).then((res) => {
