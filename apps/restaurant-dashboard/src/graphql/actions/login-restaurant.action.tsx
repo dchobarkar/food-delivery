@@ -1,5 +1,5 @@
-'use client';
-import { gql, DocumentNode } from '@apollo/client';
+"use client";
+import { gql, DocumentNode } from "@apollo/client";
 
 export const LOGIN_RESTAURANT: DocumentNode = gql`
   mutation LoginRestaurant($email: String!, $password: String!) {
@@ -13,8 +13,8 @@ export const LOGIN_RESTAURANT: DocumentNode = gql`
         password
         phone_number
       }
-      accessToken
-      refreshToken
+      access_token
+      refresh_token
       error {
         message
       }

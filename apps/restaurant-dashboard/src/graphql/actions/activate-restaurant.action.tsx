@@ -3,8 +3,8 @@
 import { gql, DocumentNode } from "@apollo/client";
 
 export const ACTIVATION_RESTAURANT: DocumentNode = gql`
-  mutation activateRestaurant($activationToken: String!) {
-    activateRestaurant(activationDto: { activationToken: $activationToken }) {
+  mutation activateRestaurant($activation_token: String!) {
+    activateRestaurant(activationDto: { activation_token: $activation_token }) {
       restaurant {
         name
         country

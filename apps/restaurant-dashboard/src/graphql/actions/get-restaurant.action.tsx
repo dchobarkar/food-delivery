@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { gql, DocumentNode } from '@apollo/client';
+import { gql, DocumentNode } from "@apollo/client";
 
 export const GET_RESTAURANT: DocumentNode = gql`
   query {
@@ -14,8 +14,8 @@ export const GET_RESTAURANT: DocumentNode = gql`
         password
         phone_number
       }
-      accessToken
-      refreshToken
+      access_token
+      refresh_token
     }
   }
 `;

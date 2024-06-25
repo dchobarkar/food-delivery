@@ -12,10 +12,10 @@ export const GET_FOODS: DocumentNode = gql`
           public_id
           url
         }
-        estimatedPrice
+        estimated_price
         category
-        createdAt
-        updatedAt
+        created_at
+        updated_at
       }
     }
   }
