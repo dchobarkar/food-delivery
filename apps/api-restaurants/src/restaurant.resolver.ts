@@ -16,19 +16,19 @@ import { RestaurantService } from "./restaurant.service";
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
+  // Send activation code to create new restaurant
   @Mutation(() => RegisterResponse)
   async registerRestaurant(
     @Args("registerDto") registerDto: RegisterDto,
     @Context() context: { res: Response }
   ): Promise<RegisterResponse> {
-    const { message } = await this.restaurantService.registerRestaurant(
+    return await this.restaurantService.registerRestaurant(
       registerDto,
       context.res
     );
-
-    return { message };
   }
 
+  // Activate the new restaurant account
   @Mutation(() => ActivationResponse)
   async activateRestaurant(
     @Args("activationDto") activationDto: ActivationDto,
@@ -40,6 +40,7 @@ export class RestaurantResolver {
     );
   }
 
+  // Login restaurant
   @Mutation(() => LoginResponse)
   async LoginRestaurant(
     @Args("email") email: string,
@@ -48,6 +49,7 @@ export class RestaurantResolver {
     return await this.restaurantService.LoginRestuarant({ email, password });
   }
 
+  // Get logged in restaurant
   @Query(() => LoginResponse)
   @UseGuards(AuthGuard)
   async getLoggedInRestaurant(
@@ -56,6 +58,7 @@ export class RestaurantResolver {
     return await this.restaurantService.getLoggedInRestaurant(context.req);
   }
 
+  // Log out restaurant
   @Query(() => LogoutResposne)
   @UseGuards(AuthGuard)
   async logOutRestaurant(@Context() context: { req: Request }) {

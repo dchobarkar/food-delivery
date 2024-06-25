@@ -5,8 +5,8 @@ import { JwtService, JwtVerifyOptions } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 
 import { ActivationDto, LoginDto, RegisterDto } from "./dto/restaurant.dto";
-import { EmailService } from "./email/email.service";
 import { PrismaService } from "../prisma/prisma.service";
+import { EmailService } from "./email/email.service";
 import { TokenSender } from "./utils/send.token";
 
 interface Restaurant {
@@ -23,7 +23,7 @@ interface Restaurant {
 export class RestaurantService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService
   ) {}
@@ -33,7 +33,7 @@ export class RestaurantService {
     const { name, country, city, address, email, phone_number, password } =
       registerDto as Restaurant;
 
-    const isEmailExist = await this.prisma.restaurant.findUnique({
+    const isEmailExist = await this.prismaService.restaurant.findUnique({
       where: {
         email,
       },
@@ -43,11 +43,13 @@ export class RestaurantService {
         "Restaurant already exist with this email!"
       );
 
-    const usersWithPhoneNumber = await this.prisma.restaurant.findUnique({
-      where: {
-        phone_number,
-      },
-    });
+    const usersWithPhoneNumber = await this.prismaService.restaurant.findUnique(
+      {
+        where: {
+          phone_number,
+        },
+      }
+    );
     if (usersWithPhoneNumber)
       throw new BadRequestException(
         "Restaurant already exist with this phone number!"
@@ -83,7 +85,7 @@ export class RestaurantService {
 
   // Create activation token
   async createActivationToken(restaurant: Restaurant) {
-    const activationToken = this.jwtService.sign(
+    return this.jwtService.sign(
       {
         restaurant,
       },
@@ -92,28 +94,26 @@ export class RestaurantService {
         expiresIn: "5m",
       }
     );
-
-    return activationToken;
   }
 
-  // Activation restaurant
+  // Activate the new restaurant account
   async activateRestaurant(activationDto: ActivationDto, response: Response) {
-    const { activationToken } = activationDto;
-
+    const { activation_token } = activationDto;
     const newRestaurant: {
       exp: number;
       restaurant: Restaurant;
       activationToken: string;
-    } = this.jwtService.verify(activationToken, {
+    } = this.jwtService.verify(activation_token, {
       secret: this.configService.get<string>("JWT_SECRET_KEY"),
     } as JwtVerifyOptions);
+
     if (newRestaurant?.exp * 1000 < Date.now())
       throw new BadRequestException("Invalid activation code");
 
     const { name, country, city, phone_number, password, email, address } =
       newRestaurant.restaurant;
 
-    const existRestaurant = await this.prisma.restaurant.findUnique({
+    const existRestaurant = await this.prismaService.restaurant.findUnique({
       where: {
         email,
       },
@@ -123,7 +123,7 @@ export class RestaurantService {
         "Restaurant already exist with this email!"
       );
 
-    const restaurant = await this.prisma.restaurant.create({
+    const restaurant = await this.prismaService.restaurant.create({
       data: {
         name,
         email,
@@ -141,8 +141,7 @@ export class RestaurantService {
   // Login restaurant
   async LoginRestuarant(loginDto: LoginDto) {
     const { email, password } = loginDto;
-
-    const restaurant = await this.prisma.restaurant.findUnique({
+    const restaurant = await this.prismaService.restaurant.findUnique({
       where: {
         email,
       },
@@ -177,8 +176,8 @@ export class RestaurantService {
   // Get logged in restaurant
   async getLoggedInRestaurant(req: any) {
     const restaurant = req.restaurant;
-    const refreshToken = req.refreshtoken;
-    const accessToken = req.accesstoken;
+    const refreshToken = req.refresh_token;
+    const accessToken = req.access_token;
 
     return { restaurant, accessToken, refreshToken };
   }
@@ -186,8 +185,8 @@ export class RestaurantService {
   // Log out restaurant
   async Logout(req: any) {
     req.restaurant = null;
-    req.refreshtoken = null;
-    req.accesstoken = null;
+    req.refresh_token = null;
+    req.access_token = null;
 
     return { message: "Logged out successfully!" };
   }

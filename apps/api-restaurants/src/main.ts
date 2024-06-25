@@ -15,7 +15,6 @@ async function bootstrap() {
     join(__dirname, "..", "apps/api-restaurants/email-templates")
   );
   app.setViewEngine("ejs");
-
   app.enableCors({
     origin: "*",
   });
