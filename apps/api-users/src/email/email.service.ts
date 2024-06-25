@@ -1,11 +1,11 @@
-import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { MailerService } from "@nestjs-modules/mailer";
+import { Injectable } from "@nestjs/common";
 
 type mailOptions = {
   subject: string;
   email: string;
   name: string;
-  activationCode: string;
+  activation_code: string;
   template: string;
 };
 
@@ -16,7 +16,7 @@ export class EmailService {
     subject,
     email,
     name,
-    activationCode,
+    activation_code,
     template,
   }: mailOptions) {
     await this.mailService.sendMail({
@@ -25,7 +25,7 @@ export class EmailService {
       template,
       context: {
         name,
-        activationCode,
+        activation_code,
       },
     });
   }

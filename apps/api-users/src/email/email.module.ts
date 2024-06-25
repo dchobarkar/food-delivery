@@ -20,7 +20,7 @@ import { EmailService } from "./email.service";
           },
         },
         defaults: {
-          from: "Becodemy",
+          from: "DarshanWebDev",
         },
         template: {
           dir: join(__dirname, "../../../apps/api-users/email-templates"),
