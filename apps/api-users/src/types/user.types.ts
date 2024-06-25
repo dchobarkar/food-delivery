@@ -35,10 +35,10 @@ export class LoginResponse {
   user?: User | unknown;
 
   @Field({ nullable: true })
-  accessToken?: string;
+  access_token?: string;
 
   @Field({ nullable: true })
-  refreshToken?: string;
+  refresh_token?: string;
 
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;

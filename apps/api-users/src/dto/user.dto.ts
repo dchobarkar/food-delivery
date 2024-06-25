@@ -5,12 +5,12 @@ import { InputType, Field } from "@nestjs/graphql";
 export class RegisterDto {
   @Field()
   @IsNotEmpty({ message: "Name is required." })
-  @IsString({ message: "Name must need to be one string." })
+  @IsString({ message: "Name must be a string." })
   name: string;
 
   @Field()
   @IsNotEmpty({ message: "Password is required." })
-  @MinLength(8, { message: "Password must be at least 8 characters." })
+  @MinLength(8, { message: "Password must be at least 8 characters long." })
   password: string;
 
   @Field()
@@ -19,19 +19,19 @@ export class RegisterDto {
   email: string;
 
   @Field()
-  @IsNotEmpty({ message: "Phone Number is required." })
+  @IsNotEmpty({ message: "Phone number is required." })
   phone_number: number;
 }
 
 @InputType()
 export class ActivationDto {
   @Field()
-  @IsNotEmpty({ message: "Activation Token is required." })
-  activationToken: string;
+  @IsNotEmpty({ message: "Activation token is required." })
+  activation_token: string;
 
   @Field()
-  @IsNotEmpty({ message: "Activation Code is required." })
-  activationCode: string;
+  @IsNotEmpty({ message: "Activation code is required." })
+  activation_code: string;
 }
 
 @InputType()
@@ -58,10 +58,10 @@ export class ForgotPasswordDto {
 export class ResetPasswordDto {
   @Field()
   @IsNotEmpty({ message: "Password is required." })
-  @MinLength(8, { message: "Password must be at least 8 characters." })
+  @MinLength(8, { message: "Password must be at least 8 characters long." })
   password: string;
 
   @Field()
-  @IsNotEmpty({ message: "Activation Token is required." })
-  activationToken: string;
+  @IsNotEmpty({ message: "Activation token is required." })
+  activation_token: string;
 }
