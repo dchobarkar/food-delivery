@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 
-import { ACTIVATION_RESTAURANT } from "../../../../graphql/actions/activation.restaurant";
+import { ACTIVATION_RESTAURANT } from "../../../../graphql/actions/activate-restaurant.action";
 
 const Page = ({ params }: { params: any }) => {
   const [verified, setVerified] = useState(false);

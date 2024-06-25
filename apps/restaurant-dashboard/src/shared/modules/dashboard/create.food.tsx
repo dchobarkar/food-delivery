@@ -10,13 +10,13 @@ import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { foodCategoryItems } from "../../../app/configs/constants";
-import { CREATE_FOOD } from "../../../graphql/actions/create.food";
+import { CREATE_FOOD } from "../../../graphql/actions/create-food.action";
 
 const formSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
-  estimatedPrice: z.number(),
+  estimated_price: z.number(),
   category: z.string(),
   images: z.array(z.string()),
 });
@@ -37,6 +37,7 @@ const CreateFood = () => {
     resolver: zodResolver(formSchema),
   });
 
+  // Create new food
   const onSubmit = async (data: createFoodSchema) => {
     try {
       await createFoodMutation({
@@ -46,7 +47,7 @@ const CreateFood = () => {
             description: data.description,
             category: data.category,
             price: data.price,
-            estimatedPrice: data.estimatedPrice,
+            estimated_price: data.estimated_price,
             images: data.images,
           },
         },
@@ -124,14 +125,12 @@ const CreateFood = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
           <div>
             <label className="label">Enter Food Name</label>
-
             <input
               {...register("name")}
               type="text"
               placeholder="Paneer Cheese Biryani"
               className="input"
             />
-
             {errors.name && (
               <span className="text-red-500 block mt-1">
                 {errors.name?.message}
@@ -141,7 +140,6 @@ const CreateFood = () => {
 
           <div>
             <label className="label mt-2">Enter Food Description</label>
-
             <textarea
               {...register("description")}
               rows={8}
@@ -149,7 +147,6 @@ const CreateFood = () => {
               placeholder="This Paneer Cheese Biryani has spicy barbecue sauce, peppers, onion, and cilantro, all covered with cheese and baked to bubbly goodness! This is similar to a recipe I had at a popular pizza place in California. My family loves it!"
               className="input !h-[unset] !p-2"
             />
-
             {errors.description && (
               <span className="text-red-500 block mt-1">
                 {errors.description?.message}
@@ -160,7 +157,6 @@ const CreateFood = () => {
           <div className="flex items-center flex-wrap justify-between">
             <div className="w-[48%]">
               <label className="label mt-2">Enter Food Price</label>
-
               <input
                 {...register("price", {
                   valueAsNumber: true,
@@ -169,7 +165,6 @@ const CreateFood = () => {
                 placeholder="12"
                 className="input"
               />
-
               {errors.price && (
                 <span className="text-red-500 block mt-1">
                   {errors.price?.message}
@@ -179,19 +174,17 @@ const CreateFood = () => {
 
             <div className="w-[48%]">
               <label className="label mt-2">Enter Food Estimated price</label>
-
               <input
-                {...register("estimatedPrice", {
+                {...register("estimated_price", {
                   valueAsNumber: true,
                 })}
                 type="number"
                 placeholder="25"
                 className="input"
               />
-
-              {errors.estimatedPrice && (
+              {errors.estimated_price && (
                 <span className="text-red-500 block mt-1">
-                  {errors.estimatedPrice?.message}
+                  {errors.estimated_price?.message}
                 </span>
               )}
             </div>
@@ -199,7 +192,6 @@ const CreateFood = () => {
 
           <div>
             <label className="label mt-2">Select Food Category</label>
-
             <select
               className="input"
               {...register("category")}
@@ -213,7 +205,6 @@ const CreateFood = () => {
                 </option>
               ))}
             </select>
-
             {errors.category && (
               <span className="text-red-500 block mt-1">
                 {errors.category?.message}
@@ -223,7 +214,6 @@ const CreateFood = () => {
 
           <div>
             <label className="label mt-3">Upload Food images</label>
-
             <div className="w-full">
               <input
                 id="file"
@@ -234,7 +224,6 @@ const CreateFood = () => {
                 className="hidden"
                 onChange={handleImageFileChange}
               />
-
               <label
                 htmlFor="file"
                 className={`w-full mt-2 rounded-md min-h-[15vh] border-white p-3 border flex items-center justify-center ${

@@ -10,7 +10,7 @@ import { Country, State } from "country-state-city";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 
-import { REGISTER_RESTAURANT } from "../../../graphql/actions/register.restaurant";
+import { REGISTER_RESTAURANT } from "../../../graphql/actions/register-restaurant.action";
 
 const formSchema = z.object({
   name: z.string(),
@@ -19,7 +19,7 @@ const formSchema = z.object({
   address: z.string(),
   phone_number: z
     .number()
-    .min(9, "Phone number must need to be at least 9 characters long!"),
+    .min(10, "Phone number must need to be at least 10 characters long!"),
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters long!"),
 });
@@ -63,14 +63,12 @@ const Register = () => {
       <div className="w-[650px] px-6 py-10 border border-[#ffffff3d] rounded-xl mt-8">
         <form onSubmit={handleSubmit(onSubmit)} className="!font-Poppins">
           <label className="label block">Enter Restaurant name</label>
-
           <input
             {...register("name")}
             type="text"
             placeholder="Foodpanda"
             className="input"
           />
-
           {errors.name && (
             <span className="text-red-500 block mt-1">
               {`${errors.name.message}`}
@@ -81,7 +79,6 @@ const Register = () => {
             <label htmlFor="password" className="label block">
               Choose your country
             </label>
-
             <select
               className="w-[95%] border input h-[40px] rounded-[5px]"
               {...register("country")}
@@ -92,7 +89,6 @@ const Register = () => {
               <option className="block pb-2" value="">
                 Choose your country
               </option>
-
               {Country &&
                 Country.getAllCountries().map((item) => (
                   <option key={item.isoCode} value={item.isoCode}>
@@ -101,7 +97,6 @@ const Register = () => {
                 ))}
             </select>
           </div>
-
           {errors.country && (
             <span className="text-red-500">{`${errors.country.message}`}</span>
           )}
@@ -110,7 +105,6 @@ const Register = () => {
             <label htmlFor="password" className="label block">
               Choose your city
             </label>
-
             <select
               className="w-[95%] border input h-[40px] rounded-[5px]"
               {...register("city")}
@@ -121,7 +115,6 @@ const Register = () => {
               <option className="block pb-2" value="">
                 Choose your city
               </option>
-
               {State &&
                 State.getStatesOfCountry(watch("country")).map((item) => (
                   <option key={item.isoCode} value={item.isoCode}>
@@ -130,7 +123,6 @@ const Register = () => {
                 ))}
             </select>
           </div>
-
           {errors.city && (
             <span className="text-red-500">{`${errors.city.message}`}</span>
           )}
@@ -139,7 +131,6 @@ const Register = () => {
             <label htmlFor="address" className="label block">
               Enter your address
             </label>
-
             <input
               {...register("address")}
               type={"text"}
@@ -147,7 +138,6 @@ const Register = () => {
               className="input"
             />
           </div>
-
           {errors.address && (
             <span className="text-red-500">{`${errors.address.message}`}</span>
           )}
@@ -156,7 +146,6 @@ const Register = () => {
             <label htmlFor="address" className="label block">
               Enter your phone number
             </label>
-
             <input
               {...register("phone_number", { valueAsNumber: true })}
               type={"number"}
@@ -164,7 +153,6 @@ const Register = () => {
               className="input"
             />
           </div>
-
           {errors.phone_number && (
             <span className="text-red-500">{`${errors.phone_number.message}`}</span>
           )}
@@ -173,7 +161,6 @@ const Register = () => {
             <label htmlFor="address" className="label block">
               Enter your restaurant email
             </label>
-
             <input
               {...register("email")}
               type={"text"}
@@ -181,7 +168,6 @@ const Register = () => {
               className="input"
             />
           </div>
-
           {errors.email && (
             <span className="text-red-500">{`${errors.email.message}`}</span>
           )}
@@ -190,14 +176,12 @@ const Register = () => {
             <label htmlFor="password" className="label block">
               Enter your password
             </label>
-
             <input
               {...register("password")}
               type={!show ? "password" : "text"}
               placeholder="password!@%"
               className="input"
             />
-
             {!show ? (
               <AiOutlineEyeInvisible
                 className="absolute bottom-3 right-2 z-1 cursor-pointer"
@@ -212,7 +196,6 @@ const Register = () => {
               />
             )}
           </div>
-
           {errors.password && (
             <span className="text-red-500">{`${errors.password.message}`}</span>
           )}
